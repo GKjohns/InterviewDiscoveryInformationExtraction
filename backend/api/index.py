@@ -4,6 +4,8 @@ from datetime import datetime
 import sys
 from pathlib import Path
 from llm import extraction_chain, summary_chain  # Import the chains
+from langchain.schema.runnable import RunnableParallel
+
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -18,22 +20,27 @@ def home():
 def generate_report():
     data = request.json
     transcript = data.get('transcript', '')
-
+    
     if not transcript:
         return jsonify({'error': 'Transcript is required'}), 400
 
     try:
-        extraction_output = extraction_chain.invoke({'transcript': transcript})
+        extraction_output = extraction_chain.invoke({
+            'transcript': transcript
+        })
         summary_output = summary_chain.invoke({
-            'transcript': transcript,
-            'extracted_insights': extraction_output
+            'transcript': transcript
         })
+        print(transcript, '\n\n')
+        print(extraction_output)
 
-        return jsonify({
+        response = {
             'extracted_insights': extraction_output,
-            'summary': summary_output['report'],
-            'key_takeaway': summary_output['key_takeaway']
-        })
+            'summary': summary_output['report']
+        }
+
+        return jsonify(response)
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

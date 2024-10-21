@@ -30,7 +30,7 @@
         <!-- Display extracted insights -->
         <div class="insights">
           <h2>User Problems</h2>
-          <ul v-if="extractedInsights.user_problems.length">
+          <ul v-if="extractedInsights && extractedInsights.user_problems && extractedInsights.user_problems.length">
             <li v-for="(problem, index) in extractedInsights.user_problems" :key="index">
               <strong>{{ problem.problem }}</strong> {{ problem.context }}
             </li>
@@ -38,7 +38,7 @@
           <p v-else>No user problems identified.</p>
 
           <h2>Opportunities</h2>
-          <ul v-if="extractedInsights.opportunities.length">
+          <ul v-if="extractedInsights && extractedInsights.opportunities && extractedInsights.opportunities.length">
             <li v-for="(opportunity, index) in extractedInsights.opportunities" :key="index">
               <strong>{{ opportunity.opportunity }}</strong> {{ opportunity.potential_impact }}
             </li>
@@ -46,7 +46,7 @@
           <p v-else>No opportunities identified.</p>
 
           <h2>User Motivations</h2>
-          <ul v-if="extractedInsights.user_motivations.length">
+          <ul v-if="extractedInsights && extractedInsights.user_motivations && extractedInsights.user_motivations.length">
             <li v-for="(motivation, index) in extractedInsights.user_motivations" :key="index">
               <strong>{{ motivation.motivation }}</strong> {{ motivation.underlying_need }}
             </li>
@@ -113,12 +113,12 @@ export default {
       "Airbnb's founders used to photograph every property themselves in the early days.",
       "The term 'solopreneur' was first used in 1996 by Terri Lonier.",
       "Facebook's iconic blue color was chosen because Mark Zuckerberg is red-green colorblind.",
-    "The first coworking space opened in San Francisco in 2005.",
-    "Uber was originally called 'UberCab' and was conceived as a luxury car service.",
-    "The 'subscription box' business model was pioneered by Birchbox in 2010.",
-    "Tesla was founded by Martin Eberhard and Marc Tarpenning, not Elon Musk.",
-    "The term 'pivot' in business was popularized by Eric Ries in his book 'The Lean Startup'.",
-    "Stripe was founded by two Irish brothers, Patrick and John Collison."
+      "The first coworking space opened in San Francisco in 2005.",
+      "Uber was originally called 'UberCab' and was conceived as a luxury car service.",
+      "The 'subscription box' business model was pioneered by Birchbox in 2010.",
+      "Tesla was founded by Martin Eberhard and Marc Tarpenning, not Elon Musk.",
+      "The term 'pivot' in business was popularized by Eric Ries in his book 'The Lean Startup'.",
+      "Stripe was founded by two Irish brothers, Patrick and John Collison."
     ];
     return {
       file: null,
@@ -237,6 +237,7 @@ export default {
 .footer img {
   height: 16px;
   margin-left: 5px;
+  margin-right: 5px; /* Add this line to create space between the logo and the text */
 }
 
 h1, h2 {
@@ -446,3 +447,4 @@ button:disabled {
   }
 }
 </style>
+

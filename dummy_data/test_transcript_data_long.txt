@@ -1,0 +1,90 @@
+# kwd-flow-982 (2024-10-21 15:20 GMT-4) - Transcript
+
+## Attendees
+Rachel Chen (UX Researcher), David Martinez (Product Manager at GlobalTech Solutions)
+
+## Transcript
+
+Rachel: Hi David, thanks for taking the time today. I'd love to learn about how research and reports make their way through your organization, especially how people discover insights they need for their work.
+
+David: Thanks for having me. It's actually a pretty complex challenge we're dealing with right now, especially with our team spread across different time zones.
+
+Rachel: Could you walk me through how you personally discover new research or reports that might be relevant to your work?
+
+David: Sure. Right now it's a mix really. Sometimes I get emails from our research team about new findings, but honestly, those often get lost in my inbox. More frequently, I find myself digging through our internal wiki when I need something specific for a decision we're making.
+
+Rachel: That's interesting - so it sounds like both push and pull mechanisms. How do you feel about that balance?
+
+David: *sighs* The push notifications, like emails or Slack messages, they're well-intentioned but can be overwhelming. I probably miss important stuff because it comes when I'm in the middle of something else. But the pull system has its own issues - I often don't know what I don't know, you know? Sometimes I'll learn about a relevant study weeks after making a decision, and think "wow, I wish I'd known about this earlier."
+
+Rachel: Could you tell me about a specific time when you needed to find some research and what that process looked like?
+
+David: Yeah, actually, last month we were redesigning our enterprise dashboard. I remembered seeing something about user preferences for data visualization, but couldn't remember where. Spent about two hours going through old emails with keywords, then checking Confluence, then finally messaging three different people before finding out it was in someone's Google Drive folder that I didn't even have access to.
+
+Rachel: That sounds frustrating. How often would you say that happens?
+
+David: More often than I'd like to admit. I'd say at least twice a month I spend significant time hunting down information I know exists somewhere. Sometimes I just give up and make decisions based on gut feeling because the research is too hard to find.
+
+Rachel: When you do successfully find relevant research, how do you usually share it with others?
+
+David: Usually through Slack. I'll send links to the relevant documents, but then that creates another problem - the same information ends up scattered across different Slack channels. Someone might share insights from a user study in our design channel, while related technical constraints are discussed in the engineering channel. It's hard to get the full picture.
+
+Rachel: Could you walk me through how research is typically conducted and distributed in your organization?
+
+David: Our research team does a mix of surveys, interviews, and analytics analysis. They usually present findings in a meeting, share the slides, and upload detailed reports to our wiki. But here's the thing - the presentations are great for high-level insights, but months later when I need specific details, finding that information in the wiki is like a scavenger hunt.
+
+Rachel: How do you keep track of research that might be relevant for future projects?
+
+David: *laughing slightly* Bold of you to assume I have a system! I try to bookmark important stuff, but my bookmarks are a mess. Sometimes I'll write notes in Notion, but then I have the same problem - searching through my notes isn't much easier than searching through the original sources.
+
+Rachel: What happens when new team members join? How do they get up to speed on existing research?
+
+David: That's actually a huge pain point. We have an onboarding document with links to "essential reading," but it's probably 30 or 40 different documents. No one has time to read all that, so new folks end up learning things piecemeal, usually when they run into problems that our research has already addressed.
+
+Rachel: When new research comes out, how do you determine if it's relevant to your work?
+
+David: Currently, it's mostly through subject lines in emails or Slack messages. Our research team tries to tag relevant departments, but sometimes they miss connections that might not be obvious. For example, we had a study about mobile user behavior that turned out to be super relevant for our desktop product too, but the desktop team wasn't initially tagged.
+
+Rachel: How do you handle updates or changes to existing research?
+
+David: *pauses* That's complicated. Sometimes new findings contradict old ones, but the old reports don't get updated - they just sit there in the wiki. Unless you read through everything chronologically, you might miss important updates or changes in our understanding.
+
+Rachel: What about urgent or critical findings? How are those communicated differently?
+
+David: They usually come through as @channel messages in Slack, which theoretically makes sense, but we get so many "urgent" messages that it's hard to distinguish truly critical findings from regular updates.
+
+Rachel: Could you describe your ideal scenario for discovering and accessing research?
+
+David: I'd love something like Netflix's recommendation engine, but for research. Something that knows my role, my current projects, and can proactively suggest relevant research. And when I'm actively looking for something, I want to be able to find it without having to remember exactly where it was stored or what it was called.
+
+Rachel: How do you currently prioritize what research to read or review?
+
+David: Mostly based on immediate needs. If I'm working on a specific feature, I'll look for directly relevant research. But I know I'm missing out on valuable insights that might inform my work in less obvious ways. There's just so much content and so little time.
+
+Rachel: How do you handle research from external sources versus internal studies?
+
+David: We have subscriptions to some industry research platforms, but that's yet another place to check. Sometimes our internal research references external studies, but finding those original sources can be tricky. And again, it all lives in different places - some in email, some in shared drives, some behind paywalls.
+
+Rachel: When you find useful research, how do you usually apply it to your work?
+
+David: I try to share key findings with my team during our planning sessions. But it's challenging to present research in a way that's both thorough and digestible. Often, I end up summarizing complex findings into bullet points, which isn't ideal but seems to be the only way to make it actionable.
+
+Rachel: How do you validate whether other team members have seen and understood important research?
+
+David: *sighs deeply* That's a real blind spot. Unless it comes up in conversation, I usually don't know who's seen what. Sometimes we'll reference a study in a meeting and get blank stares from half the room. We've tried research review sessions, but attendance is inconsistent because everyone's so busy.
+
+Rachel: What role does timing play in how research is received and utilized?
+
+David: Huge role. If research arrives right when we're making relevant decisions, it's incredibly valuable. But often there's a mismatch - we get research results weeks after we needed them, or we get them months before they're relevant and forget about them by the time they'd be useful.
+
+Rachel: This has been incredibly insightful, David. Is there anything else you'd like to add about how research flows through your organization?
+
+David: Just that it's a really crucial problem to solve. We invest so much in generating insights, but if they don't reach the right people at the right time, we're not getting the full value. And it's not just about having a better wiki or search tool - it's about understanding how people actually work and making research discovery fit into those patterns.
+
+Rachel: Thank you so much for sharing all of this. Your insights will be really valuable as we think about how to improve research distribution systems.
+
+David: Happy to help. Let me know if you need any clarification or have follow-up questions.
+
+Meeting ended after 01:15:30
+
+*This editable transcript was computer generated and might contain errors. People can also change the text after it was created.*

@@ -32,7 +32,7 @@ def create_chain_from_task_asset(task_asset, openai_key):
     ])
     
     llm = ChatOpenAI(   
-        model=task_asset.get('model', 'gpt-4o-mini'),
+        model=task_asset.get('model', 'gpt-4o'),
         temperature=task_asset.get('temperature', 0.0),
         max_tokens=task_asset.get('max_tokens', 1024),
         openai_api_key=openai_key,
