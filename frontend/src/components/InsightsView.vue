@@ -1,53 +1,35 @@
 <template>
   <div class="insights-container">
-    <div class="categories">
-      <button
-        v-for="(items, category) in formattedCategories"
-        :key="category"
-        @click="activeCategory = category"
-        :class="['category-button', { active: activeCategory === category }]"
-      >
-        {{ formatTitle(category) }}
-      </button>
-    </div>
-
-    <div class="insights-content">
-      <h2>{{ formatTitle(activeCategory) }}</h2>
-      <ul v-if="formattedCategories[activeCategory].length">
-        <li v-for="(item, index) in formattedCategories[activeCategory]" :key="index">
-          <strong>{{ getPrimaryText(item, activeCategory) }}</strong>
-          <p>{{ getSecondaryText(item, activeCategory) }}</p>
+    <div v-for="(items, category) in formattedCategories" :key="category" class="category-section">
+      <h2>{{ formatTitle(category) }}</h2>
+      <ul v-if="items.length">
+        <li v-for="(item, index) in items" :key="index">
+          <div class="insight-content">
+            <h3>{{ getPrimaryText(item, category) }}</h3>
+            <p>{{ getSecondaryText(item, category) }}</p>
+          </div>
         </li>
       </ul>
       <p v-else class="no-data">
-        No {{ formatTitle(activeCategory).toLowerCase() }} identified.
+        No {{ formatTitle(category).toLowerCase() }} identified.
       </p>
     </div>
     <button @click="showFullScreen" class="fullscreen-button">Full Screen</button>
   </div>
   <FullScreenModal v-if="isFullScreen" @close="isFullScreen = false">
     <div class="insights-container">
-      <div class="categories">
-        <button
-          v-for="(items, category) in formattedCategories"
-          :key="category"
-          @click="activeCategory = category"
-          :class="['category-button', { active: activeCategory === category }]"
-        >
-          {{ formatTitle(category) }}
-        </button>
-      </div>
-
-      <div class="insights-content">
-        <h2>{{ formatTitle(activeCategory) }}</h2>
-        <ul v-if="formattedCategories[activeCategory].length">
-          <li v-for="(item, index) in formattedCategories[activeCategory]" :key="index">
-            <strong>{{ getPrimaryText(item, activeCategory) }}</strong>
-            <p>{{ getSecondaryText(item, activeCategory) }}</p>
+      <div v-for="(items, category) in formattedCategories" :key="category" class="category-section">
+        <h2>{{ formatTitle(category) }}</h2>
+        <ul v-if="items.length">
+          <li v-for="(item, index) in items" :key="index">
+            <div class="insight-content">
+              <h3>{{ getPrimaryText(item, category) }}</h3>
+              <p>{{ getSecondaryText(item, category) }}</p>
+            </div>
           </li>
         </ul>
         <p v-else class="no-data">
-          No {{ formatTitle(activeCategory).toLowerCase() }} identified.
+          No {{ formatTitle(category).toLowerCase() }} identified.
         </p>
       </div>
     </div>
@@ -71,7 +53,11 @@ const props = defineProps({
   }
 });
 
-const activeCategory = ref('user_problems');
+const isFullScreen = ref(false);
+
+const showFullScreen = () => {
+  isFullScreen.value = true;
+};
 
 const formattedCategories = computed(() => ({
   user_problems: props.insights.user_problems || [],
@@ -103,51 +89,29 @@ const getSecondaryText = (item, category) => {
   };
   return item[mappings[category]] || '';
 };
-
-const isFullScreen = ref(false);
-
-const showFullScreen = () => {
-  isFullScreen.value = true;
-};
 </script>
 
 <style scoped>
 .insights-container {
   display: flex;
+  flex-direction: column;
   height: 100%;
-}
-
-.categories {
-  width: 200px;
-  border-right: 1px solid #e0e0e0;
-  padding-right: 15px;
-}
-
-.category-button {
-  display: block;
-  width: 100%;
-  text-align: left;
-  padding: 10px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.category-button.active {
-  background-color: #f0f0f0;
-  font-weight: 500;
-}
-
-.insights-content {
-  flex-grow: 1;
-  padding-left: 20px;
   overflow-y: auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+.category-section {
+  margin-bottom: 40px;
 }
 
 h2 {
-  font-size: 18px;
-  margin-bottom: 15px;
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #5000b8;
+  font-weight: 600;
 }
 
 ul {
@@ -156,28 +120,50 @@ ul {
 }
 
 li {
-  margin-bottom: 15px;
+  margin-bottom: 24px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-strong {
-  display: block;
-  margin-bottom: 5px;
+.insight-content {
+  padding: 20px;
+}
+
+h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+  color: #555;
+  font-size: 14px;
 }
 
 .no-data {
-  color: #666;
+  color: #888;
   font-style: italic;
+  font-size: 14px;
 }
 
 .fullscreen-button {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  padding: 5px 10px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
   background-color: #5000b8;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.fullscreen-button:hover {
+  background-color: #4000a0;
 }
 </style>

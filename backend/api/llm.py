@@ -24,8 +24,6 @@ def create_chain_from_task_asset(task_asset, openai_key):
     - A chain that can be invoked with the appropriate input.
     """
     
-    
-    
     prompt_template = ChatPromptTemplate.from_messages([
         ('system', task_asset['task']),
         ('user', task_asset['prompt'])
