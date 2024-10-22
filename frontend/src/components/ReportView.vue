@@ -1,57 +1,47 @@
 <!-- components/ReportView.vue -->
 <template>
   <div class="report-container">
-    <div class="report-header">
-      <h2>Analysis Report</h2>
-    </div>
-    <div class="report-content">
-      <div v-html="renderedReport" class="markdown-content"></div>
-    </div>
+    <div v-html="renderedReport" class="markdown-content"></div>
+    <button @click="showFullScreen" class="fullscreen-button">Full Screen</button>
   </div>
+  <FullScreenModal v-if="isFullScreen" @close="isFullScreen = false">
+    <div v-html="renderedReport" class="markdown-content"></div>
+  </FullScreenModal>
 </template>
 
-<script>
-import { computed } from 'vue';
+<script setup>
+import { computed, ref } from 'vue';
 import { marked } from 'marked';
+import { defineProps } from 'vue';
+import FullScreenModal from './FullScreenModal.vue';
 
-export default {
-  name: 'ReportView',
-  props: {
-    report: {
-      type: String,
-      required: true,
-      default: ''
-    }
-  },
-  setup(props) {
-    const renderedReport = computed(() => marked(props.report));
-    return { renderedReport };
+const props = defineProps({
+  report: {
+    type: String,
+    required: true,
+    default: ''
   }
+});
+
+const renderedReport = computed(() => marked(props.report));
+const isFullScreen = ref(false);
+
+const showFullScreen = () => {
+  isFullScreen.value = true;
 };
 </script>
 
-<style>
+<style scoped>
 .report-container {
-  background-color: white;
-  border-radius: 0.5rem;
-  overflow: hidden;
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px;
 }
 
-.report-header {
-  padding: 1rem 1.5rem;
-  background-color: #f9fafb;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.report-header h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-color);
-  margin: 0;
-}
-
-.report-content {
-  padding: 1.5rem;
+.markdown-content {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  color: #333;
+  line-height: 1.6;
 }
 
 .markdown-content h1,
@@ -60,20 +50,32 @@ export default {
 .markdown-content h4,
 .markdown-content h5,
 .markdown-content h6 {
-  font-weight: 600;
-  color: var(--text-color);
-  margin-top: 1.5rem;
+  margin-top: 2rem;
   margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.markdown-content h1 {
+  font-size: 2.5rem;
+}
+
+.markdown-content h2 {
+  font-size: 2rem;
+}
+
+.markdown-content h3 {
+  font-size: 1.75rem;
 }
 
 .markdown-content p {
-  margin-bottom: 1rem;
-  color: var(--text-color);
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
 }
 
 .markdown-content ul,
 .markdown-content ol {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   padding-left: 1.5rem;
 }
 
@@ -82,11 +84,36 @@ export default {
 }
 
 .markdown-content a {
-  color: var(--primary-color);
+  color: #5000b8;
   text-decoration: none;
 }
 
 .markdown-content a:hover {
   text-decoration: underline;
+}
+
+.markdown-content pre,
+.markdown-content code {
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  padding: 0.2em 0.4em;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.markdown-content pre {
+  padding: 1em;
+  overflow-x: auto;
+}
+
+.fullscreen-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  background-color: #5000b8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 </style>

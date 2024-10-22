@@ -1,61 +1,59 @@
 <!-- components/TranscriptView.vue -->
 <template>
   <div class="transcript-container">
-    <div class="transcript-header">
-      <h2>Uploaded Transcript</h2>
-    </div>
-    <div class="transcript-content">
-      <pre>{{ transcript }}</pre>
-    </div>
+    <pre>{{ transcript }}</pre>
+    <button @click="showFullScreen" class="fullscreen-button">Full Screen</button>
   </div>
+  <FullScreenModal v-if="isFullScreen" @close="isFullScreen = false">
+    <pre>{{ transcript }}</pre>
+  </FullScreenModal>
 </template>
 
-<script>
-export default {
-  name: 'TranscriptView',
-  props: {
-    transcript: {
-      type: String,
-      required: true,
-      default: ''
-    }
+<script setup>
+import { defineProps, ref } from 'vue';
+import FullScreenModal from './FullScreenModal.vue';
+
+defineProps({
+  transcript: {
+    type: String,
+    required: true,
+    default: ''
   }
+});
+
+const isFullScreen = ref(false);
+
+const showFullScreen = () => {
+  isFullScreen.value = true;
 };
 </script>
 
-<style>
+<style scoped>
 .transcript-container {
-  background-color: white;
-  border-radius: 0.5rem;
-  overflow: hidden;
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 4px;
 }
 
-.transcript-header {
-  padding: 1rem 1.5rem;
-  background-color: #f9fafb;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.transcript-header h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-color);
-  margin: 0;
-}
-
-.transcript-content {
-  padding: 1.5rem;
-}
-
-.transcript-content pre {
+pre {
   white-space: pre-wrap;
-  font-size: 0.875rem;
-  color: var(--text-color);
-  background-color: #f9fafb;
-  border-radius: 0.375rem;
-  padding: 1rem;
-  overflow: auto;
-  max-height: 400px;
-  border: 1px solid var(--border-color);
+  word-wrap: break-word;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.fullscreen-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  background-color: #5000b8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 </style>

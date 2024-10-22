@@ -1,320 +1,297 @@
 <!-- App.vue -->
 <template>
   <div class="app-container">
-    <nav class="app-nav">
-      <div class="nav-content">
-        <h1 class="app-title">Customer Discovery Insights</h1>
-      </div>
-    </nav>
+    <h1 class="title">UX Interview Analyzer</h1>
+    
+    <div class="file-input-container">
+      <label for="file-upload" class="file-input-label">
+        Choose File
+      </label>
+      <input 
+        id="file-upload" 
+        type="file" 
+        @change="handleFileUpload" 
+        accept=".txt"
+        class="file-input"
+      >
+      <span class="file-name">{{ fileName || 'No file chosen' }}</span>
+    </div>
 
-    <main class="app-main">
-      <div class="upload-section">
-        <input type="file" @change="handleFileUpload" accept=".txt" class="file-input" ref="fileInput" />
-        <button @click="$refs.fileInput.click()" class="upload-button">
-          Upload Transcript
+    <button @click="analyzeTranscript" class="analyze-button" :disabled="!file">
+      <span class="icon">↑</span> Analyze Transcript
+    </button>
+
+    <div v-if="loading" class="loading-indicator">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">
+        <p>Analyzing transcript...</p>
+        <p class="fun-fact">{{ currentFunFact }}</p>
+      </div>
+    </div>
+
+    <div v-if="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div v-if="transcript" class="content-wrapper">
+      <div class="tabs">
+        <button 
+          v-for="tab in tabs" 
+          :key="tab.id"
+          @click="activeTab = tab.id"
+          :class="['tab-button', { active: activeTab === tab.id }]"
+        >
+          {{ tab.name }}
         </button>
       </div>
 
-      <div class="content-container">
-        <div class="tabs">
-          <button
-            v-for="tab in tabs"
-            :key="tab.name"
-            @click="activeTab = tab.id"
-            :class="['tab-button', { active: activeTab === tab.id }]"
-          >
-            <i :class="tab.icon"></i>
-            {{ tab.name }}
-          </button>
-        </div>
-
-        <div class="tab-content">
-          <div v-if="loading" class="loading-container">
-            <div class="loading-spinner"></div>
-            <p class="loading-text">{{ currentFunFact }}</p>
-          </div>
-
-          <div v-else-if="error" class="error-message">
-            {{ error }}
-          </div>
-
-          <div v-else>
-            <TranscriptView
-              v-if="activeTab === 'transcript'"
-              :transcript="transcript"
-            />
-            <ReportView
-              v-if="activeTab === 'report'"
-              :report="report"
-            />
-            <InsightsView
-              v-if="activeTab === 'insights'"
-              :insights="insights"
-            />
-          </div>
-        </div>
+      <div class="content-area">
+        <h2>{{ activeTab === 'transcript' ? 'Original Transcript' : activeTab === 'summary' ? 'Summary' : 'Structured Data' }}</h2>
+        <TranscriptView v-if="activeTab === 'transcript'" :transcript="transcript" />
+        <ReportView v-else-if="activeTab === 'summary'" :report="report" />
+        <InsightsView v-else :insights="extractedInsights" />
       </div>
-    </main>
+    </div>
 
-    <footer class="app-footer">
-      <div class="footer-content">
-        Powered by
-        <a href="https://www.ara.social" target="_blank" class="footer-link">
-          Ara Platforms
-        </a>
-      </div>
-    </footer>
+    <div v-else class="upload-prompt">
+      <p>Upload a transcript file to begin analysis.</p>
+    </div>
+    
   </div>
 </template>
 
-<script>
-import { ref, computed } from 'vue';
+<script setup>
+import { ref } from 'vue';
 import axios from 'axios';
 import TranscriptView from './components/TranscriptView.vue';
 import ReportView from './components/ReportView.vue';
 import InsightsView from './components/InsightsView.vue';
-import { funFacts } from './utils/funFacts';
 
-export default {
-  name: 'App',
-  components: {
-    TranscriptView,
-    ReportView,
-    InsightsView
-  },
-  setup() {
-    const activeTab = ref('transcript');
-    const transcript = ref('');
-    const report = ref('');
-    const insights = ref({
-      user_problems: [],
-      opportunities: [],
-      user_motivations: []
+const file = ref(null);
+const fileName = ref('');
+const transcript = ref('');
+const report = ref('');
+const extractedInsights = ref({ user_problems: [], opportunities: [], user_motivations: [] });
+const activeTab = ref('transcript');
+const loading = ref(false);
+const error = ref('');
+const currentFunFact = ref('');
+
+const tabs = [
+  { id: 'transcript', name: 'Original Transcript' },
+  { id: 'summary', name: 'Summary' },
+  { id: 'structured', name: 'Structured Data' },
+];
+
+const handleFileUpload = (event) => {
+  file.value = event.target.files[0];
+  fileName.value = file.value ? file.value.name : '';
+};
+
+const analyzeTranscript = async () => {
+  if (!file.value) return;
+
+  loading.value = true;
+  error.value = '';
+  report.value = '';
+  extractedInsights.value = { user_problems: [], opportunities: [], user_motivations: [] };
+  currentFunFact.value = getRandomFunFact();
+
+  try {
+    transcript.value = await readFileContent(file.value);
+    const response = await axios.post('http://localhost:5010/api/generate_report', {
+      transcript: transcript.value,
     });
-    const loading = ref(false);
-    const error = ref('');
-    const currentFunFact = ref('');
 
-    const tabs = computed(() => [
-      { id: 'transcript', name: 'Transcript', icon: 'fas fa-file-alt' },
-      { id: 'report', name: 'Analysis Report', icon: 'fas fa-chart-bar' },
-      { id: 'insights', name: 'Extracted Insights', icon: 'fas fa-list' }
-    ]);
-
-    const handleFileUpload = async (event) => {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      loading.value = true;
-      error.value = '';
-      currentFunFact.value = funFacts[Math.floor(Math.random() * funFacts.length)];
-
-      try {
-        const reader = new FileReader();
-        const fileContent = await new Promise((resolve, reject) => {
-          reader.onload = (e) => resolve(e.target.result);
-          reader.onerror = reject;
-          reader.readAsText(file);
-        });
-
-        transcript.value = fileContent;
-
-        const response = await axios.post('http://localhost:5010/api/generate_report', {
-          transcript: fileContent,
-        });
-
-        report.value = response.data.summary;
-        insights.value = response.data.extracted_insights || {
-          user_problems: [],
-          opportunities: [],
-          user_motivations: []
-        };
-
-        activeTab.value = 'report';
-      } catch (e) {
-        error.value = 'An error occurred while analyzing the transcript. Please try again.';
-        console.error('Error:', e);
-      } finally {
-        loading.value = false;
-      }
-    };
-
-    return {
-      activeTab,
-      transcript,
-      report,
-      insights,
-      loading,
-      error,
-      currentFunFact,
-      tabs,
-      handleFileUpload
-    };
+    report.value = response.data.summary;
+    extractedInsights.value = response.data.extracted_insights || extractedInsights.value;
+    activeTab.value = 'summary';
+  } catch (err) {
+    error.value = 'An error occurred while analyzing the transcript. Please try again.';
+    console.error('Error:', err);
+  } finally {
+    loading.value = false;
   }
+};
+
+const readFileContent = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (event) => resolve(event.target.result);
+    reader.onerror = (error) => reject(error);
+    reader.readAsText(file);
+  });
+};
+
+const getRandomFunFact = () => {
+  const funFacts = [
+    "Did you know? The first computer bug was an actual bug!",
+    "The term 'debugging' originated from removing an actual moth from a computer.",
+    "The first computer mouse was made of wood!",
+    "The first programmer in the world was a woman named Ada Lovelace.",
+    "The first computer virus was created in 1983 as an experiment.",
+  ];
+  return funFacts[Math.floor(Math.random() * funFacts.length)];
 };
 </script>
 
-<style>
-:root {
-  --primary-color: #3b82f6;
-  --primary-dark: #2563eb;
-  --background-color: #f3f4f6;
-  --text-color: #1f2937;
-  --text-light: #6b7280;
-  --border-color: #e5e7eb;
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  margin: 0;
-  padding: 0;
-}
-
+<style scoped>
 .app-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.file-input-container {
   display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  align-items: center;
+  margin-bottom: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
-.app-nav {
-  background-color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.nav-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-.app-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--primary-color);
-  margin: 0;
-}
-
-.app-main {
-  flex-grow: 1;
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.upload-section {
-  margin-bottom: 2rem;
+.file-input-label {
+  background-color: #f0e6ff;
+  color: #5000b8;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: 500;
 }
 
 .file-input {
   display: none;
 }
 
-.upload-button {
-  background-color: var(--primary-color);
+.file-name {
+  padding: 0 15px;
+  color: #666;
+}
+
+.analyze-button {
+  background-color: #808080;
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  border-radius: 0.375rem;
+  padding: 10px 15px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 
-.upload-button:hover {
-  background-color: var(--primary-dark);
-}
-
-.content-container {
-  background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+.icon {
+  margin-right: 8px;
 }
 
 .tabs {
   display: flex;
-  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .tab-button {
-  flex-grow: 1;
-  padding: 1rem;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-light);
-  background-color: transparent;
+  flex: 1;
+  background: none;
   border: none;
+  padding: 10px;
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
+  font-size: 14px;
 }
 
 .tab-button.active {
-  color: var(--primary-color);
-  border-bottom: 2px solid var(--primary-color);
+  background-color: #f0f0f0;
+  font-weight: 500;
 }
 
-.tab-button i {
-  margin-right: 0.5rem;
+.content-area {
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 4px;
+  height: 400px; /* Set a fixed height */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
-.tab-content {
-  padding: 2rem;
+.content-area h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
 }
 
-.loading-container {
+.transcript, .summary, .structured-data {
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.loading-indicator {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 200px;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
 }
 
 .loading-spinner {
-  border: 4px solid var(--border-color);
-  border-top: 4px solid var(--primary-color);
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3498db;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
   animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+.loading-text {
+  flex: 1;
+}
+
+.loading-text p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.fun-fact {
+  font-style: italic;
+  color: #666;
+  font-size: 12px;
+}
+
+.error-message {
+  color: #ff0000;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.content-wrapper {
+  margin-top: 20px;
+}
+
+.upload-prompt {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+}
+
+.upload-prompt p {
+  font-size: 16px;
+  color: #666;
 }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
-
-.loading-text {
-  margin-top: 1rem;
-  color: var(--text-light);
-}
-
-.error-message {
-  color: #dc2626;
-  text-align: center;
-}
-
-.app-footer {
-  background-color: white;
-  border-top: 1px solid var(--border-color);
-  padding: 1rem;
-  text-align: center;
-}
-
-.footer-content {
-  font-size: 0.875rem;
-  color: var(--text-light);
-}
-
-.footer-link {
-  color: var(--primary-color);
-  text-decoration: none;
-}
-
-.footer-link:hover {
-  text-decoration: underline;
 }
 </style>
