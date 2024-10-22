@@ -17,15 +17,22 @@
       <span class="file-name">{{ fileName || 'No file chosen' }}</span>
     </div>
 
-    <button @click="analyzeTranscript" class="analyze-button" :disabled="!file">
-      <span class="icon">↑</span> Analyze Transcript
-    </button>
+    <div class="analyze-section">
+      <button 
+        @click="analyzeTranscript" 
+        class="analyze-button" 
+        :class="{ 'active-button': isFileSelected }" 
+        :disabled="!file"
+      >
+        <span class="icon">↑</span> Analyze Transcript
+      </button>
 
-    <div v-if="loading" class="loading-indicator">
-      <div class="loading-spinner"></div>
-      <div class="loading-text">
-        <p>Analyzing transcript...</p>
-        <p class="fun-fact">{{ currentFunFact }}</p>
+      <div v-if="loading" class="loading-indicator">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">
+          <p>Analyzing transcript...</p>
+          <p class="fun-fact">{{ currentFunFact }}</p>
+        </div>
       </div>
     </div>
 
@@ -61,7 +68,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import axios from 'axios';
 import TranscriptView from './components/TranscriptView.vue';
 import ReportView from './components/ReportView.vue';
@@ -133,37 +140,45 @@ const getRandomFunFact = () => {
   ];
   return funFacts[Math.floor(Math.random() * funFacts.length)];
 };
+
+const isFileSelected = computed(() => !!file.value);
 </script>
 
 <style scoped>
 .app-container {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  max-width: 600px;
+  max-width: 800px; /* Increased from 600px */
   margin: 0 auto;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 28px; /* Increased from 24px */
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 30px; /* Increased from 20px */
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .file-input-container {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px; /* Increased from 15px */
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   overflow: hidden;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .file-input-label {
   background-color: #f0e6ff;
   color: #5000b8;
-  padding: 10px 15px;
+  padding: 12px 20px; /* Increased padding */
   cursor: pointer;
   font-weight: 500;
+  font-size: 16px; /* Added font size */
 }
 
 .file-input {
@@ -171,21 +186,28 @@ const getRandomFunFact = () => {
 }
 
 .file-name {
-  padding: 0 15px;
+  padding: 0 20px; /* Increased from 15px */
   color: #666;
+  font-size: 14px; /* Added font size */
 }
 
 .analyze-button {
   background-color: #808080;
   color: white;
   border: none;
-  padding: 10px 15px;
+  padding: 12px 20px;
   border-radius: 4px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  font-size: 14px;
-  margin-bottom: 20px;
+  font-size: 16px;
+  margin-bottom: 30px;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.analyze-button.active-button {
+  background-color: #5000b8; /* Changed to match the purple theme */
 }
 
 .icon {
@@ -198,15 +220,16 @@ const getRandomFunFact = () => {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   overflow: hidden;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .tab-button {
   flex: 1;
   background: none;
   border: none;
-  padding: 10px;
+  padding: 12px 15px; /* Increased padding */
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px; /* Increased from 14px */
 }
 
 .tab-button.active {
@@ -216,10 +239,11 @@ const getRandomFunFact = () => {
 
 .content-area {
   background-color: #f8f8f8;
-  padding: 20px;
+  padding: 30px; /* Increased from 20px */
   border-radius: 4px;
-  height: 400px; /* Set a fixed height */
-  overflow-y: auto; /* Enable vertical scrolling */
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .content-area h2 {
@@ -236,10 +260,10 @@ const getRandomFunFact = () => {
 .loading-indicator {
   display: flex;
   align-items: center;
-  margin-top: 10px;
   padding: 10px;
   background-color: #f0f0f0;
   border-radius: 4px;
+  flex-shrink: 0;
 }
 
 .loading-spinner {
@@ -271,10 +295,16 @@ const getRandomFunFact = () => {
   color: #ff0000;
   margin-top: 20px;
   text-align: center;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .content-wrapper {
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 1; /* Allow content to shrink if needed */
+  min-height: 0; /* Allow content to shrink within flexbox */
 }
 
 .upload-prompt {
@@ -283,11 +313,64 @@ const getRandomFunFact = () => {
   padding: 20px;
   background-color: #f8f8f8;
   border-radius: 4px;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .upload-prompt p {
   font-size: 16px;
   color: #666;
+}
+
+.analyze-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.analyze-button {
+  background-color: #808080;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.analyze-button.active-button {
+  background-color: #5000b8;
+}
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .analyze-section {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .analyze-button {
+    width: auto;
+    flex: 1;
+  }
+
+  .loading-indicator {
+    flex: 2;
+  }
 }
 
 @keyframes spin {
