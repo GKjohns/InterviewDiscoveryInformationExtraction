@@ -22,18 +22,19 @@
         <button 
           @click="analyzeTranscript" 
           class="analyze-button" 
-          :class="{ 'active-button': isFileSelected }" 
-          :disabled="!file"
+          :class="{ 'active-button': isFileSelected, 'loading': loading }" 
+          :disabled="!file || loading"
         >
-          <span class="icon">↑</span> Analyze Transcript
+          <span v-if="!loading">
+            <span class="icon">↑</span> Analyze Transcript
+          </span>
+          <span v-else class="loading-dots">
+            <span>.</span><span>.</span><span>.</span>
+          </span>
         </button>
 
-        <div v-if="loading" class="loading-indicator">
-          <div class="loading-spinner"></div>
-          <div class="loading-text">
-            <p>Analyzing transcript...</p>
-            <p class="fun-fact">{{ currentFunFact }}</p>
-          </div>
+        <div v-if="loading" class="fun-fact">
+          Did you know? {{ currentFunFact }}
         </div>
       </div>
 
@@ -53,10 +54,6 @@
 
       <div v-if="error" class="error-message">
         {{ error }}
-      </div>
-
-      <div v-if="!transcript" class="upload-prompt">
-        <p>Upload a transcript file to begin analysis.</p>
       </div>
     </div>
 
@@ -150,11 +147,21 @@ const getRandomFunFact = () => {
 const isFileSelected = computed(() => !!file.value);
 </script>
 
-<style scoped>
+<style>
+/* Global styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Modify the .app-container */
 .app-container {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   display: flex;
-  height: 100vh;
+  height: 100vh; /* Changed from 100% to 100vh */
+  overflow: hidden;
 }
 
 .sidebar {
@@ -166,6 +173,8 @@ const isFileSelected = computed(() => !!file.value);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  user-select: none;
+  height: 100vh; /* Changed from 100% to 100vh */
 }
 
 .main-content {
@@ -173,7 +182,8 @@ const isFileSelected = computed(() => !!file.value);
   padding: 20px;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow: hidden;
+  height: 100vh; /* Changed from 100% to 100vh */
 }
 
 .title {
@@ -231,6 +241,8 @@ const isFileSelected = computed(() => !!file.value);
   transition: background-color 0.3s ease;
   flex-shrink: 0;
   width: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
 .analyze-button.active-button {
@@ -239,6 +251,10 @@ const isFileSelected = computed(() => !!file.value);
 
 .analyze-button:disabled {
   background-color: #808080;
+  cursor: not-allowed;
+}
+
+.analyze-button.loading {
   cursor: not-allowed;
 }
 
@@ -275,6 +291,10 @@ const isFileSelected = computed(() => !!file.value);
   flex-grow: 1;
   overflow-y: auto;
   border: 1px solid #e0e0e0;
+  height: 100%;
+  max-height: calc(100vh - 80px); /* Changed from 40px to 80px to account for padding */
+  padding-bottom: 30px; /* Explicitly set bottom padding */
+  margin-bottom: 20px; /* Add margin at bottom */
 }
 
 .content-area h2 {
@@ -307,9 +327,11 @@ const isFileSelected = computed(() => !!file.value);
 }
 
 .fun-fact {
+  text-align: center;
   font-style: italic;
   color: #666;
-  font-size: 12px;
+  font-size: 14px;
+  margin-top: 10px;
 }
 
 .error-message {
@@ -321,7 +343,9 @@ const isFileSelected = computed(() => !!file.value);
 .content-wrapper {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex-grow: 1;
+  overflow: hidden;
+  padding: 20px; /* Changed from padding-bottom to full padding */
 }
 
 .upload-prompt {
@@ -375,8 +399,41 @@ const isFileSelected = computed(() => !!file.value);
   font-weight: 500;
 }
 
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-dots span {
+  animation: loadingDots 1.4s infinite ease-in-out both;
+  font-size: 24px;
+  margin: 0 2px;
+}
+
+.loading-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes loadingDots {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.file-input-label,
+.analyze-button,
+.tab-button,
+.upload-prompt,
+.tab-title {
+  user-select: none; /* Make text non-highlightable */
 }
 </style>

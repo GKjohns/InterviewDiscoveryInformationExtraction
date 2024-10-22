@@ -8,5 +8,16 @@ export const funFacts = [
   "The first business incubator opened in Batavia, New York in 1959.",
   "The term 'unicorn' for billion-dollar startups was coined by Aileen Lee in 2013.",
   "About 90% of startups fail, with 10% failing within the first year.",
-  "The fastest company to reach a $1 billion valuation was Niantic, the maker of Pokémon Go."
+  "The fastest company to reach a $1 billion valuation was Niantic, the maker of Pokémon Go.",
+  "Virginia is home to over 700 cybersecurity companies, making it a hub for tech security startups.",
+  "The first commercial Internet Service Provider, PSINet, was founded in Northern Virginia in 1989.",
+  "Richmond, Virginia, has been named one of the top cities for millennials to start a business by CNBC.",
+  "The 'pivot' strategy, popularized by startups, was first described by Eric Ries in his book 'The Lean Startup'.",
+  "Y Combinator, one of the most famous startup accelerators, has an acceptance rate of less than 3%.",
+  "Virginia ranks #1 in the U.S. for highest concentration of tech workers, according to CyberStates 2021.",
+  "The average successful startup raises $41 million in venture capital over 3 rounds of funding.",
+  "Richmond's startup ecosystem has grown by over 200% in the last decade, according to Startup Genome.",
+  "The first tweet by Twitter co-founder Jack Dorsey simply said 'just setting up my twttr'.",
+  "Virginia Tech's Corporate Research Center in Blacksburg has incubated over 750 tech companies since 1985.",
+  "The term 'growth hacking' was coined by Sean Ellis in 2010 to describe creative, low-cost strategies for startup growth."
 ];
