@@ -8,8 +8,8 @@
 </template>
 
 <script setup>
-import { defineEmits } from 'vue';
-defineEmits(['close']);
+  import { defineEmits } from 'vue';
+  defineEmits(['close']);
 </script>
 
 <style scoped>
