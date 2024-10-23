@@ -2,58 +2,65 @@
 <template>
   <div class="app-container">
     <div class="sidebar">
-      <h1 class="title">UX Interview Analyzer</h1>
-      
-      <div class="file-input-container">
-        <label for="file-upload" class="file-input-label">
-          Choose File
-        </label>
-        <input 
-          id="file-upload" 
-          type="file" 
-          @change="handleFileUpload" 
-          accept=".txt"
-          class="file-input"
-        >
-        <span class="file-name">{{ fileName || 'No file chosen' }}</span>
-      </div>
-
-      <div class="analyze-section">
-        <button 
-          @click="analyzeTranscript" 
-          class="analyze-button" 
-          :class="{ 'active-button': isFileSelected, 'loading': loading }" 
-          :disabled="!file || loading"
-        >
-          <span v-if="!loading">
-            <span class="icon">↑</span> Analyze Transcript
-          </span>
-          <span v-else class="loading-dots">
-            <span>.</span><span>.</span><span>.</span>
-          </span>
-        </button>
-
-        <div v-if="loading" class="fun-fact">
-          Did you know? {{ currentFunFact }}
-        </div>
-      </div>
-
-      <div v-if="transcript" class="tab-container">
-        <h3 class="tab-title">View Options</h3>
-        <div class="tabs">
-          <button 
-            v-for="tab in tabs" 
-            :key="tab.id"
-            @click="activeTab = tab.id"
-            :class="['tab-button', { active: activeTab === tab.id }]"
+      <div class="sidebar-content">
+        <h1 class="title">UX Interview Analyzer</h1>
+        
+        <div class="file-input-container">
+          <label for="file-upload" class="file-input-label">
+            Choose File
+          </label>
+          <input 
+            id="file-upload" 
+            type="file" 
+            @change="handleFileUpload" 
+            accept=".txt"
+            class="file-input"
           >
-            {{ tab.name }}
+          <span class="file-name">{{ fileName || 'No file chosen' }}</span>
+        </div>
+
+        <div class="analyze-section">
+          <button 
+            @click="analyzeTranscript" 
+            class="analyze-button" 
+            :class="{ 'active-button': isFileSelected, 'loading': loading }" 
+            :disabled="!file || loading"
+          >
+            <span v-if="!loading">
+              <span class="icon">↑</span> Analyze Transcript
+            </span>
+            <span v-else class="loading-dots">
+              <span>.</span><span>.</span><span>.</span>
+            </span>
           </button>
+
+          <div v-if="loading" class="fun-fact">
+            Did you know? {{ currentFunFact }}
+          </div>
+        </div>
+
+        <div v-if="transcript" class="tab-container">
+          <h3 class="tab-title">View Options</h3>
+          <div class="tabs">
+            <button 
+              v-for="tab in tabs" 
+              :key="tab.id"
+              @click="activeTab = tab.id"
+              :class="['tab-button', { active: activeTab === tab.id }]"
+            >
+              {{ tab.name }}
+            </button>
+          </div>
+        </div>
+
+        <div v-if="error" class="error-message">
+          {{ error }}
         </div>
       </div>
 
-      <div v-if="error" class="error-message">
-        {{ error }}
+      <div class="powered-by">
+        Powered by <img src="https://www.kylejohnson.ai/img/ara_logo.png" alt="Ara" class="ara-logo"> 
+        <a href="https://www.ara.social" class="ara-link">Ara Platforms</a>
       </div>
     </div>
 
@@ -106,6 +113,7 @@ import axios from 'axios';
 import TranscriptView from './components/TranscriptView.vue';
 import ReportView from './components/ReportView.vue';
 import InsightsView from './components/InsightsView.vue';
+import { funFacts } from './utils/funFacts';
 
 const file = ref(null);
 const fileName = ref('');
@@ -164,13 +172,6 @@ const readFileContent = (file) => {
 };
 
 const getRandomFunFact = () => {
-  const funFacts = [
-    "Did you know? The first computer bug was an actual bug!",
-    "The term 'debugging' originated from removing an actual moth from a computer.",
-    "The first computer mouse was made of wood!",
-    "The first programmer in the world was a woman named Ada Lovelace.",
-    "The first computer virus was created in 1983 as an experiment.",
-  ];
   return funFacts[Math.floor(Math.random() * funFacts.length)];
 };
 
@@ -202,9 +203,13 @@ html, body {
   border-right: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  position: relative;
+}
+
+.sidebar-content {
+  flex: 1;
   overflow-y: auto;
-  user-select: none;
-  height: 100vh; /* Changed from 100% to 100vh */
 }
 
 .main-content {
@@ -546,5 +551,45 @@ html, body {
   margin: 0;
   line-height: 1.4;
 }
+
+.powered-by {
+  position: absolute;
+  bottom: 40px; /* Increased from 20px to 40px to move it higher */
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.ara-logo {
+  height: 20px;
+  width: auto;
+}
+
+.ara-link {
+  background: linear-gradient(90deg, #4A7A9D, #A3D5E0, #F8C2C9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-decoration: none;
+  transition: text-decoration 0.2s ease;
+  padding: 2px 0; /* Add padding to ensure full text visibility */
+  line-height: normal; /* Ensure proper line height */
+}
+
+.ara-link:hover {
+  text-decoration: underline;
+}
 </style>
+
+
+
+
+
 
