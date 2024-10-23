@@ -7,8 +7,7 @@
   <div v-else class="empty-state">
     <div class="empty-icon">📊</div>
     <h3>Analysis in Progress</h3>
-    <p>Your transcript will be analyzed and a detailed summary will appear here.</p>
-    <p class="sub-text">The summary will include key findings, patterns, and recommendations based on the interview content.</p>
+    <p>Your transcript will be analyzed and a detailed summary will appear here. The summary will include key findings, patterns, and recommendations based on the interview content.</p>
   </div>
   <FullScreenModal v-if="isFullScreen" @close="isFullScreen = false">
     <div v-html="renderedReport" class="markdown-content"></div>
@@ -133,6 +132,11 @@ const showFullScreen = () => {
   text-align: center;
   padding: 40px 20px;
   color: #666;
+  display: flex;
+  flex-direction: column; /* Ensure vertical layout */
+  align-items: center; /* Center align items */
+  height: auto; /* Ensure height is only as much as needed */
+  overflow: hidden; /* Prevent scroll bar from appearing */
 }
 
 .empty-icon {

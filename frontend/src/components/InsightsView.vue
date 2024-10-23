@@ -195,6 +195,11 @@ p {
   text-align: center;
   padding: 40px 20px;
   color: #666;
+  display: flex;
+  flex-direction: column; /* Ensure vertical layout */
+  align-items: center; /* Center align items */
+  height: auto; /* Ensure height is only as much as needed */
+  overflow: hidden; /* Prevent scroll bar from appearing */
 }
 
 .empty-icon {
@@ -220,6 +225,7 @@ p {
   max-width: 300px;
   margin: 0 auto;
   text-align: left;
+  display: block; /* Ensure list items are displayed as block */
 }
 
 .empty-list li {
@@ -230,6 +236,7 @@ p {
   box-shadow: none;
   font-size: 14px;
   color: #555;
+  width: 100%; /* Ensure full width for list items */
 }
 
 .list-icon {

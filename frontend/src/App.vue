@@ -482,6 +482,7 @@ html, body {
 }
 
 .empty-state-content {
+  user-select: none; /* Make all text inside non-highlightable */
   max-width: 800px;
   text-align: center;
   padding: 40px;
@@ -586,10 +587,14 @@ html, body {
 .ara-link:hover {
   text-decoration: underline;
 }
+
+.empty-state-content h2,
+.empty-state-content > p {
+  user-select: none; /* Make text non-highlightable */
+}
+
+.step-text {
+  user-select: none; /* Make text non-highlightable */
+}
 </style>
-
-
-
-
-
 
