@@ -93,11 +93,8 @@ const getSecondaryText = (item, category) => {
 
 <style scoped>
 .insights-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow-y: auto;
   padding: 20px;
+  position: relative; /* For fullscreen button positioning */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   color: #333;
   line-height: 1.6;
@@ -150,7 +147,7 @@ p {
 }
 
 .fullscreen-button {
-  position: fixed;
+  position: fixed; /* Changed back to fixed */
   bottom: 20px;
   right: 20px;
   padding: 10px 20px;
@@ -161,6 +158,7 @@ p {
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.2s ease;
+  z-index: 100; /* Added to ensure button stays above content */
 }
 
 .fullscreen-button:hover {

@@ -30,8 +30,7 @@ const showFullScreen = () => {
 
 <style scoped>
 .transcript-container {
-  height: 100%;
-  overflow-y: auto;
+  height: auto;
   padding: 20px;
   background-color: #f8f8f8;
   border-radius: 4px;
@@ -46,14 +45,21 @@ pre {
 }
 
 .fullscreen-button {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  padding: 5px 10px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
   background-color: #5000b8;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+  z-index: 100;
+}
+
+.fullscreen-button:hover {
+  background-color: #4000a0;
 }
 </style>
