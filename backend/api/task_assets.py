@@ -23,12 +23,16 @@ TASK_ASSETS = {
                                 "type": "string",
                                 "description": "Brief description of the problem"
                             },
+                            "quote": {
+                                "type": "string",
+                                "description": "Direct quote from the transcript that demonstrates this problem"
+                            },
                             "context": {
                                 "type": "string",
-                                "description": "Relevant context or quote from the interview"
+                                "description": "Additional context or explanation around the quote"
                             }
                         },
-                        "required": ["problem", "context"]
+                        "required": ["problem", "quote", "context"]
                     }
                 },
                 "opportunities": {
@@ -42,12 +46,16 @@ TASK_ASSETS = {
                                 "type": "string",
                                 "description": "Brief description of the opportunity"
                             },
+                            "quote": {
+                                "type": "string",
+                                "description": "Direct quote from the transcript that suggests this opportunity"
+                            },
                             "potential_impact": {
                                 "type": "string",
                                 "description": "How this could improve the user experience"
                             }
                         },
-                        "required": ["opportunity", "potential_impact"]
+                        "required": ["opportunity", "quote", "potential_impact"]
                     }
                 },
                 "user_motivations": {
@@ -60,12 +68,16 @@ TASK_ASSETS = {
                                 "type": "string",
                                 "description": "Description of the motivation"
                             },
+                            "quote": {
+                                "type": "string",
+                                "description": "Direct quote from the transcript that reveals this motivation"
+                            },
                             "underlying_need": {
                                 "type": "string",
                                 "description": "The deeper need this motivation addresses"
                             }
                         },
-                        "required": ["motivation", "underlying_need"]
+                        "required": ["motivation", "quote", "underlying_need"]
                     }
                 },
                 "current_tools": {
@@ -78,6 +90,10 @@ TASK_ASSETS = {
                                 "type": "string",
                                 "description": "Name or description of the tool"
                             },
+                            "quote": {
+                                "type": "string",
+                                "description": "Direct quote from the transcript mentioning this tool"
+                            },
                             "usage": {
                                 "type": "string",
                                 "description": "How the user is currently using this tool"
@@ -87,7 +103,7 @@ TASK_ASSETS = {
                                 "description": "Any limitations or frustrations with the tool"
                             }
                         },
-                        "required": ["tool", "usage", "limitations"]
+                        "required": ["tool", "quote", "usage", "limitations"]
                     }
                 }
             },
