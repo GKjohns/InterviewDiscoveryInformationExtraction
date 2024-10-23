@@ -66,6 +66,36 @@
           <InsightsView v-else :insights="extractedInsights" />
         </div>
       </div>
+      <div v-else class="empty-state">
+        <div class="empty-state-content">
+          <h2>Welcome to UX Interview Analyzer</h2>
+          <p>Transform your user interview transcripts into actionable insights</p>
+          
+          <div class="steps-container">
+            <div class="step">
+              <div class="step-number">1</div>
+              <div class="step-text">
+                <h3>Upload Your Transcript</h3>
+                <p>Select a .txt file containing your interview transcript</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-text">
+                <h3>Analyze Content</h3>
+                <p>Our AI will process your transcript and extract key insights</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-text">
+                <h3>Review Insights</h3>
+                <p>View the summary, key findings, and structured data</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -436,4 +466,85 @@ html, body {
 .tab-title {
   user-select: none; /* Make text non-highlightable */
 }
+
+/* Add these new styles */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 20px;
+}
+
+.empty-state-content {
+  max-width: 800px;
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 8px;
+  /* Removed: box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); */
+}
+
+.empty-state-content h2 {
+  font-size: 28px;
+  color: #5000b8;
+  margin-bottom: 12px;
+}
+
+.empty-state-content > p {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.steps-container {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  text-align: left;
+  padding: 20px;
+  background: white;  /* Changed from #f8f8f8 to white */
+  border: 1px solid #e0e0e0;  /* Added border */
+  border-radius: 8px;
+  width: 280px;
+  transition: box-shadow 0.2s ease;  /* Optional: adds subtle hover effect */
+}
+
+.step:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);  /* Optional: adds subtle hover effect */
+}
+
+.step-number {
+  background: #5000b8;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.step-text h3 {
+  font-size: 16px;
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.step-text p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+}
 </style>
+
