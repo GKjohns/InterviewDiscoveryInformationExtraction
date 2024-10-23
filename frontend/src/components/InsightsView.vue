@@ -1,5 +1,5 @@
 <template>
-  <div class="insights-container">
+  <div class="insights-container" v-if="hasInsights">
     <div v-for="(items, category) in formattedCategories" :key="category" class="category-section">
       <h2>{{ formatTitle(category) }}</h2>
       <ul v-if="items.length">
@@ -15,6 +15,25 @@
       </p>
     </div>
     <button @click="showFullScreen" class="fullscreen-button">Full Screen</button>
+  </div>
+  <div v-else class="empty-state">
+    <div class="empty-icon">💡</div>
+    <h3>No Insights Generated Yet</h3>
+    <p>After analysis, you'll see structured insights here, including:</p>
+    <ul class="empty-list">
+      <li>
+        <span class="list-icon">⚠️</span>
+        <span>User Problems & Pain Points</span>
+      </li>
+      <li>
+        <span class="list-icon">🎯</span>
+        <span>Opportunities for Improvement</span>
+      </li>
+      <li>
+        <span class="list-icon">🔍</span>
+        <span>User Motivations & Needs</span>
+      </li>
+    </ul>
   </div>
   <FullScreenModal v-if="isFullScreen" @close="isFullScreen = false">
     <div class="insights-container">
@@ -89,6 +108,11 @@ const getSecondaryText = (item, category) => {
   };
   return item[mappings[category]] || '';
 };
+
+// Add this computed property
+const hasInsights = computed(() => {
+  return Object.values(formattedCategories.value).some(arr => arr.length > 0);
+});
 </script>
 
 <style scoped>
@@ -118,26 +142,28 @@ ul {
 
 li {
   margin-bottom: 24px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #5000b8;
+  background-color: white;
+  padding-left: 16px;
 }
 
 .insight-content {
-  padding: 20px;
+  padding: 16px 0;
 }
 
 h3 {
   font-size: 18px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   color: #333;
   font-weight: 600;
+  line-height: 1.4;
 }
 
 p {
   margin: 0;
-  color: #555;
-  font-size: 14px;
+  color: #666;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .no-data {
@@ -163,5 +189,51 @@ p {
 
 .fullscreen-button:hover {
   background-color: #4000a0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-state h3 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.empty-state p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.empty-list {
+  list-style: none;
+  padding: 0;
+  max-width: 300px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.empty-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  background: none;
+  box-shadow: none;
+  font-size: 14px;
+  color: #555;
+}
+
+.list-icon {
+  margin-right: 12px;
+  font-size: 16px;
 }
 </style>

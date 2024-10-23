@@ -1,8 +1,14 @@
 <!-- components/ReportView.vue -->
 <template>
-  <div class="report-container">
+  <div class="report-container" v-if="report.trim()">
     <div v-html="renderedReport" class="markdown-content"></div>
     <button @click="showFullScreen" class="fullscreen-button">Full Screen</button>
+  </div>
+  <div v-else class="empty-state">
+    <div class="empty-icon">📊</div>
+    <h3>Analysis in Progress</h3>
+    <p>Your transcript will be analyzed and a detailed summary will appear here.</p>
+    <p class="sub-text">The summary will include key findings, patterns, and recommendations based on the interview content.</p>
   </div>
   <FullScreenModal v-if="isFullScreen" @close="isFullScreen = false">
     <div v-html="renderedReport" class="markdown-content"></div>
@@ -121,5 +127,35 @@ const showFullScreen = () => {
 
 .fullscreen-button:hover {
   background-color: #4000a0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-state h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.empty-state p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.sub-text {
+  font-size: 12px;
+  color: #888;
+  max-width: 400px;
+  margin: 0 auto;
 }
 </style>
